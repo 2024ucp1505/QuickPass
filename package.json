@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "QuickPass — Cryptographically Secure Attendance Management Platform",
   "private": true,
-  "workspaces": ["client", "server"],
   "scripts": {
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
