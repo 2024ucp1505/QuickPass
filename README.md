@@ -1,110 +1,99 @@
-# ⚡ QuickPass — Secure Attendance Management Platform
+<div align="center">
+  <img src="./assets/banner.svg" alt="QuickPass Banner" width="800" />
+</div>
 
-A cryptographically secure, real-time QR-based attendance and classroom management platform built for the modern classroom.
+<div align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101" />
+  <br />
+  <img src="https://img.shields.io/badge/Prasunethon_2.0-Hackathon_Submission-0056d2?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Built_By-Lokesh_Saini-0d0f12?style=for-the-badge" />
+</div>
 
-## Architecture
+<h1 align="center">QuickPass: Dynamic QR Ecosystem</h1>
 
+<br />
+
+## 🛑 The Problem vs. 💡 The Solution
+
+| **The Problem: Proxy Fraud & Data Silos** | **The Solution: QuickPass** |
+| :--- | :--- |
+| Traditional attendance (roll calls, static QR codes, or Bluetooth beacons) is slow, easily spoofed (screenshot sharing), and lacks real-time verification. Students mark proxies from dorms, and educators waste class time managing records. | QuickPass uses **10-second AES-256 encrypted QR codes** synced via **WebSockets**. Each code expires instantly, destroying screenshot viability. Combined with **browser fingerprinting**, it guarantees *one physical device = one attendance mark*. |
+
+## 🏗️ High-Level Architecture Flow
+
+```mermaid
+graph TD
+    A[Teacher Dashboard] -->|Generates Session| B(Server)
+    B -->|Emits AES-256 QR via Socket.io\nEvery 10 Seconds| C[Live QR Display]
+    
+    D[Student Scanner] -->|Scans QR via Camera| C
+    D -->|Submits Decrypted Payload\n+ Device Fingerprint| B
+    
+    B -->|Validates Timestamp\n& Device ID| E[(MongoDB)]
+    
+    E -->|Success: Log Attendance| F[Real-time Update to Teacher UI]
+    E -->|Failure: Proxy Attempt| G[Flag Proxy Alert to Teacher UI]
 ```
-quickpass/                  ← Monorepo root
-├── server/                 ← Node.js + Express + Socket.io + MongoDB
-└── client/                 ← React 18 + Vite + Tailwind CSS
-```
 
-## Quick Start
+## ✨ Features
 
-### 1. Install dependencies
+### 👨‍🏫 For Educators
+*   **Live QR Sessions:** 10-second auto-refreshing cryptographic QR codes.
+*   **Real-time Dashboard:** Watch attendance populate live via WebSockets.
+*   **Anti-Proxy Alerts:** Instantly flags students attempting to scan from unrecognized/duplicate devices.
+*   **Classroom Management:** Schedule builder and automated student enrollment.
+*   **Analytics & Automation:** One-click low-attendance email warnings to at-risk students.
+
+### 👨‍🎓 For Students
+*   **Smart Built-in Scanner:** Camera interface that automatically handles the AES payload.
+*   **Grace Period:** 5-minute undo window to correct mistaken scans.
+*   **Personal Analytics:** Track attendance percentages across all enrolled courses.
+*   **Integrated Notes:** Markdown-powered notebook tied directly to specific classrooms.
+
+## 🚀 Local Setup Instructions
+
+Follow these exact steps to run the full monorepo locally:
+
+### 1. Install Dependencies
 ```bash
 cd server && npm install
 cd ../client && npm install
 ```
 
-### 2. Configure environment
+### 2. Configure Environment
 ```bash
 cp server/.env.example server/.env
-# Edit server/.env — MONGO_URI, JWT_SECRET, AES_ENCRYPTION_KEY are required
+# Note: The .env is pre-filled with local hackathon credentials.
+# Make sure MONGO_URI, JWT_SECRET, and AES_ENCRYPTION_KEY are set.
 ```
 
-### 3. Seed demo data
+### 3. Seed Demo Data
+Populate the database with a test teacher, students, and classroom:
 ```bash
 cd server && npm run seed
 ```
 
-### 4. Start servers (two terminals)
-```bash
-# Terminal 1 — Backend
-cd server && npm run dev
+### 4. Boot Up Application
+Start both the backend and frontend servers concurrently (in two separate terminals):
 
-# Terminal 2 — Frontend
+**Terminal 1 (Backend):**
+```bash
+cd server && npm run dev
+```
+
+**Terminal 2 (Frontend):**
+```bash
 cd client && npm run dev
 ```
 
-App will be live at **http://localhost:5173**
+The application will be live at: **http://localhost:5173**
 
 ---
-
-## Demo Credentials
-
-| Role    | Email                   | Password    |
-|---------|-------------------------|-------------|
-| Teacher | teacher@quickpass.dev   | password123 |
-| Student | alex@student.dev        | password123 |
-| Student | priya@student.dev       | password123 |
-| Student | carlos@student.dev      | password123 |
-| Student | emma@student.dev        | password123 |
-| Student | david@student.dev       | password123 |
-
----
-
-## Key Features
-
-### Security
-- **AES-256-CBC** encrypted QR payloads — each code is unique and expires in **10 seconds**
-- **Anti-proxy enforcement** — device fingerprinting blocks shared-device attendance fraud
-- **JWT authentication** — role-based access (teacher / student)
-
-### Teacher Portal
-- Classroom CRUD with weekly schedule builder
-- Student enrollment by email
-- Live session with real-time QR display (Socket.io refreshed every 10s)
-- Live attendance feed with proxy flag alerts
-- Analytics dashboard with per-student attendance percentage
-- One-click Nodemailer email to students below 75% attendance
-
-### Student Portal
-- Built-in QR scanner (`html5-qrcode`) with proper camera lifecycle management
-- 5-minute undo window for mistaken scans
-- Personal attendance analytics per course
-- Markdown notes editor tied to classrooms
-- Weekly / list schedule view
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Backend | Node.js, Express, Socket.io |
-| Database | MongoDB with Mongoose ORM |
-| Auth | JWT (jsonwebtoken) |
-| Encryption | AES-256-CBC (Node.js `crypto`) |
-| Email | Nodemailer |
-| Frontend | React 18, Vite |
-| Styling | Tailwind CSS v3 (custom design tokens) |
-| Real-time | Socket.io |
-| QR Scan | html5-qrcode |
-| QR Render | qrcode |
-
----
-
-## Environment Variables
-
-See [`server/.env.example`](./server/.env.example) for the full reference.
-
-| Variable | Required | Description |
-|---|---|---|
-| `MONGO_URI` | ✅ | MongoDB connection string |
-| `JWT_SECRET` | ✅ | JWT signing secret |
-| `AES_ENCRYPTION_KEY` | ✅ | Exactly 32 chars for AES-256 |
-| `PORT` | ✅ | Server port (default 5000) |
-| `EMAIL_*` | Optional | SMTP config for Nodemailer |
-| `CLIENT_URL` | ✅ | CORS origin for frontend |
+<div align="center">
+  <p><i>Built for <b>Prasunethon 2.0</b> by <b>Lokesh Saini</b></i></p>
+</div>
