@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  html {
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-background text-primary min-h-screen;
+    margin: 0;
+    padding: 0;
+  }
+  ::selection {
+    background-color: #0056d2;
+    color: white;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c1cbdb;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0056d2;
+  }
+}
+
+@layer components {
+  /* ─── Buttons ─────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-20 py-12 rounded-md font-sans font-semibold text-body transition-all duration-200 cursor-pointer border-0 outline-none;
+  }
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-dark active:scale-[0.98] shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn bg-surface text-primary border border-border hover:border-accent hover:text-accent;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-red-700 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-accent hover:bg-accent-light;
+  }
+  .btn-sm {
+    @apply px-12 py-8 text-label rounded-sm;
+  }
+  .btn-lg {
+    @apply px-32 py-16 text-base rounded-lg;
+  }
+
+  /* ─── Cards ───────────────────────────── */
+  .card {
+    @apply bg-surface rounded-lg shadow-card p-20 animate-fade-in;
+  }
+  .card:hover {
+    @apply shadow-card-hover transition-shadow duration-200;
+  }
+  .card-flat {
+    @apply bg-surface rounded-lg border border-border p-20;
+  }
+
+  /* ─── Form Elements ───────────────────── */
+  .input {
+    @apply w-full px-12 py-10 bg-surface border border-border rounded-md text-body text-primary placeholder:text-text-muted outline-none transition-all duration-200 font-sans;
+  }
+  .input:focus {
+    @apply border-accent ring-2 ring-accent ring-opacity-20;
+  }
+  .input:invalid:not(:placeholder-shown) {
+    @apply border-danger;
+  }
+  .label {
+    @apply block text-label font-semibold text-text-secondary mb-4;
+  }
+  .form-group {
+    @apply flex flex-col gap-4;
+  }
+
+  /* ─── Badges ──────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-4 px-8 py-4 rounded-sm text-label font-semibold;
+  }
+  .badge-success {
+    @apply badge bg-green-100 text-success;
+  }
+  .badge-danger {
+    @apply badge bg-red-100 text-danger;
+  }
+  .badge-warning {
+    @apply badge bg-amber-100 text-warning;
+  }
+  .badge-info {
+    @apply badge bg-accent-light text-accent;
+  }
+  .badge-neutral {
+    @apply badge bg-gray-100 text-text-secondary;
+  }
+
+  /* ─── Navigation ──────────────────────── */
+  .nav-link {
+    @apply flex items-center gap-10 px-12 py-10 rounded-md text-body text-text-secondary hover:bg-accent-light hover:text-accent transition-all duration-150 cursor-pointer font-medium;
+  }
+  .nav-link.active {
+    @apply bg-accent-light text-accent font-semibold;
+  }
+
+  /* ─── Page Layout ─────────────────────── */
+  .page-header {
+    @apply mb-32;
+  }
+  .page-title {
+    @apply text-display font-semibold text-primary;
+  }
+  .page-subtitle {
+    @apply text-body text-text-muted mt-4;
+  }
+
+  /* ─── Stat Card ───────────────────────── */
+  .stat-card {
+    @apply card flex flex-col gap-8;
+  }
+  .stat-value {
+    @apply text-display font-semibold text-primary;
+  }
+  .stat-label {
+    @apply text-label text-text-muted font-medium uppercase tracking-wider;
+  }
+
+  /* ─── Table ───────────────────────────── */
+  .table-wrapper {
+    @apply overflow-x-auto rounded-md border border-border;
+  }
+  table {
+    @apply w-full text-body border-collapse;
+  }
+  thead {
+    @apply bg-background;
+  }
+  th {
+    @apply px-16 py-12 text-left text-label font-semibold text-text-muted uppercase tracking-wider border-b border-border;
+  }
+  td {
+    @apply px-16 py-12 text-body text-primary border-b border-border last:border-0;
+  }
+  tbody tr:last-child td {
+    @apply border-0;
+  }
+  tbody tr:hover {
+    @apply bg-background transition-colors duration-100;
+  }
+
+  /* ─── Modal ───────────────────────────── */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm animate-fade-in;
+  }
+  .modal {
+    @apply bg-surface rounded-xl shadow-lg p-32 w-full max-w-md mx-16 animate-slide-up;
+  }
+
+  /* ─── QR Code Container ───────────────── */
+  .qr-container {
+    @apply relative flex items-center justify-center bg-white rounded-xl p-20 shadow-card;
+  }
+  .qr-pulse-ring {
+    @apply absolute inset-0 rounded-xl border-2 border-accent animate-pulse-ring;
+  }
+
+  /* ─── Attendance Status Pills ─────────── */
+  .status-present { @apply badge-success; }
+  .status-flagged { @apply badge-danger; }
+  .status-cancelled { @apply badge-neutral; }
+
+  /* ─── Progress Bar ────────────────────── */
+  .progress-bar {
+    @apply h-8 rounded-full bg-border overflow-hidden;
+  }
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+
+  /* ─── Loading Dots ────────────────────── */
+  .loading-dot {
+    @apply w-8 h-8 rounded-full bg-accent;
+    animation: bounceDot 0.6s ease-in-out infinite;
+  }
+  .loading-dot:nth-child(2) { animation-delay: 0.15s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.3s; }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #0056d2 0%, #0a84ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
