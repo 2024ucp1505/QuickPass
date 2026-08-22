@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+  <rect width="1000" height="600" fill="#dae1ed"/>
+  
+  <!-- Mobile 1: Scanner -->
+  <rect x="220" y="50" width="260" height="500" fill="#0d0f12" rx="24" stroke="#c1cbdb" stroke-width="6"/>
+  <text x="350" y="100" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" font-weight="bold" text-anchor="middle">Scan QR</text>
+  <rect x="270" y="180" width="160" height="160" fill="none" stroke="#0056d2" stroke-width="4" stroke-dasharray="20,10" rx="8"/>
+  <line x1="250" y1="260" x2="450" y2="260" stroke="#4caf50" stroke-width="2" opacity="0.8"/>
+  <rect x="260" y="440" width="180" height="40" fill="#0056d2" rx="20"/>
+  <text x="350" y="465" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" font-weight="bold" text-anchor="middle">Align code in frame</text>
+  
+  <!-- Mobile 2: Dashboard -->
+  <rect x="520" y="50" width="260" height="500" fill="#ffffff" rx="24" stroke="#c1cbdb" stroke-width="6"/>
+  <rect x="520" y="50" width="260" height="120" fill="#0056d2" rx="24"/>
+  <rect x="520" y="150" width="260" height="20" fill="#ffffff"/> <!-- Cover bottom radius of header -->
+  <text x="540" y="100" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" font-weight="bold">Welcome back!</text>
+  <text x="540" y="125" font-family="Arial, sans-serif" font-size="12" fill="#dae1ed">Student ID: #9901</text>
+  
+  <!-- Stats Card -->
+  <rect x="540" y="160" width="220" height="80" fill="#ffffff" stroke="#c1cbdb" stroke-width="1" rx="8" style="box-shadow: 0 2px 4px rgba(0,0,0,0.05);"/>
+  <text x="560" y="190" font-family="Arial, sans-serif" font-size="14" fill="#0d0f12" font-weight="bold">Overall Attendance</text>
+  <text x="720" y="190" font-family="Arial, sans-serif" font-size="16" fill="#0056d2" font-weight="bold">85%</text>
+  <rect x="560" y="210" width="180" height="8" fill="#dae1ed" rx="4"/>
+  <rect x="560" y="210" width="153" height="8" fill="#0056d2" rx="4"/>
+  
+  <!-- Classes -->
+  <text x="540" y="280" font-family="Arial, sans-serif" font-size="14" fill="#0d0f12" font-weight="bold">Enrolled Classes</text>
+  <rect x="540" y="300" width="220" height="50" fill="#ffffff" stroke="#c1cbdb" stroke-width="1" rx="8"/>
+  <text x="555" y="322" font-family="Arial, sans-serif" font-size="12" fill="#0d0f12" font-weight="bold">Algorithms</text>
+  <text x="555" y="338" font-family="Arial, sans-serif" font-size="10" fill="#0d0f12" opacity="0.6">MWF • 9:00 AM</text>
+  <text x="720" y="330" font-family="Arial, sans-serif" font-size="12" fill="#4caf50" font-weight="bold">Present</text>
+  
+  <rect x="540" y="360" width="220" height="50" fill="#ffffff" stroke="#c1cbdb" stroke-width="1" rx="8"/>
+  <text x="555" y="382" font-family="Arial, sans-serif" font-size="12" fill="#0d0f12" font-weight="bold">Databases</text>
+  <text x="555" y="398" font-family="Arial, sans-serif" font-size="10" fill="#0d0f12" opacity="0.6">TTh • 11:00 AM</text>
+  
+  <rect x="540" y="420" width="220" height="50" fill="#ffffff" stroke="#c1cbdb" stroke-width="1" rx="8"/>
+  <text x="555" y="442" font-family="Arial, sans-serif" font-size="12" fill="#0d0f12" font-weight="bold">Computer Networks</text>
+  <text x="555" y="458" font-family="Arial, sans-serif" font-size="10" fill="#0d0f12" opacity="0.6">MWF • 1:00 PM</text>
+  
+  <!-- Left Footer Constraint -->
+  <text x="20" y="585" font-family="Arial, sans-serif" font-size="14" fill="#0d0f12" font-weight="bold">Lokesh Saini</text>
+</svg>

@@ -43,6 +43,11 @@ graph TD
 ## ✨ Features
 
 ### 👨‍🏫 For Educators
+
+<div align="center">
+  <img src="./assets/teacher.svg" alt="Teacher Dashboard" width="800" />
+</div>
+
 *   **Live QR Sessions:** 10-second auto-refreshing cryptographic QR codes.
 *   **Real-time Dashboard:** Watch attendance populate live via WebSockets.
 *   **Anti-Proxy Alerts:** Instantly flags students attempting to scan from unrecognized/duplicate devices.
@@ -50,6 +55,11 @@ graph TD
 *   **Analytics & Automation:** One-click low-attendance email warnings to at-risk students.
 
 ### 👨‍🎓 For Students
+
+<div align="center">
+  <img src="./assets/student.svg" alt="Student Mobile Views" width="800" />
+</div>
+
 *   **Smart Built-in Scanner:** Camera interface that automatically handles the AES payload.
 *   **Grace Period:** 5-minute undo window to correct mistaken scans.
 *   **Personal Analytics:** Track attendance percentages across all enrolled courses.
