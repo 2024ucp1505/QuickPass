@@ -34,6 +34,8 @@
 
 **2-minute demo:** start a session as teacher → scan QR as student → attendance appears live → try the same phone as a second student → proxy alert.
 
+Architecture, APIs, models, and security: **[Technical documentation](./TECHNICAL.md)**.
+
 ---
 
 ## Why this exists
