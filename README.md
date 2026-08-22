@@ -2,108 +2,188 @@
   <img src="./assets/banner.svg" alt="QuickPass Banner" width="800" />
 </div>
 
-<h1 align="center">QuickPass: Dynamic QR Ecosystem</h1>
+<h1 align="center">QuickPass</h1>
+
+<p align="center"><b>Cryptographically rotating QR attendance that kills screenshot proxies.</b></p>
+
+<p align="center">
+  Teachers project a live QR that expires every 10 seconds.<br />
+  Students scan once from their own device. Duplicate devices get flagged in real time.
+</p>
 
 <div align="center">
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-  <img src="https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101" />
-  <br />
-  <img src="https://img.shields.io/badge/Prasunethon_2.0-Hackathon_Submission-0056d2?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Built_By-Lokesh_Saini-0d0f12?style=for-the-badge" />
+
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com)
+[![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io)
+[![Prasunethon 2.0](https://img.shields.io/badge/Prasunethon_2.0-Hackathon-0056d2?style=for-the-badge)](#)
+
 </div>
-
-<br />
-
-## 🛑 The Problem vs. 💡 The Solution
-
-| **The Problem: Proxy Fraud & Data Silos** | **The Solution: QuickPass** |
-| :--- | :--- |
-| Traditional attendance (roll calls, static QR codes, or Bluetooth beacons) is slow, easily spoofed (screenshot sharing), and lacks real-time verification. Students mark proxies from dorms, and educators waste class time managing records. | QuickPass uses **10-second AES-256 encrypted QR codes** synced via **WebSockets**. Each code expires instantly, destroying screenshot viability. Combined with **browser fingerprinting**, it guarantees *one physical device = one attendance mark*. |
-
-## 🏗️ High-Level Architecture Flow
-
-```mermaid
-graph TD
-    A[Teacher Dashboard] -->|Generates Session| B(Server)
-    B -->|Emits AES-256 QR via Socket.io\nEvery 10 Seconds| C[Live QR Display]
-    
-    D[Student Scanner] -->|Scans QR via Camera| C
-    D -->|Submits Decrypted Payload\n+ Device Fingerprint| B
-    
-    B -->|Validates Timestamp\n& Device ID| E[(MongoDB)]
-    
-    E -->|Success: Log Attendance| F[Real-time Update to Teacher UI]
-    E -->|Failure: Proxy Attempt| G[Flag Proxy Alert to Teacher UI]
-```
-
-## ✨ Features
-
-### 👨‍🏫 For Educators
-
-<div align="center">
-  <img src="./assets/teacher.svg" alt="Teacher Dashboard" width="800" />
-</div>
-
-*   **Live QR Sessions:** 10-second auto-refreshing cryptographic QR codes.
-*   **Real-time Dashboard:** Watch attendance populate live via WebSockets.
-*   **Anti-Proxy Alerts:** Instantly flags students attempting to scan from unrecognized/duplicate devices.
-*   **Classroom Management:** Schedule builder and automated student enrollment.
-*   **Analytics & Automation:** One-click low-attendance email warnings to at-risk students.
-
-### 👨‍🎓 For Students
-
-<div align="center">
-  <img src="./assets/student.svg" alt="Student Mobile Views" width="800" />
-</div>
-
-*   **Smart Built-in Scanner:** Camera interface that automatically handles the AES payload.
-*   **Grace Period:** 5-minute undo window to correct mistaken scans.
-*   **Personal Analytics:** Track attendance percentages across all enrolled courses.
-*   **Integrated Notes:** Markdown-powered notebook tied directly to specific classrooms.
-
-## 🚀 Local Setup Instructions
-
-Follow these exact steps to run the full monorepo locally:
-
-### 1. Install Dependencies
-```bash
-cd server && npm install
-cd ../client && npm install
-```
-
-### 2. Configure Environment
-```bash
-cp server/.env.example server/.env
-# Note: The .env is pre-filled with local hackathon credentials.
-# Make sure MONGO_URI, JWT_SECRET, and AES_ENCRYPTION_KEY are set.
-```
-
-### 3. Seed Demo Data
-Populate the database with a test teacher, students, and classroom:
-```bash
-cd server && npm run seed
-```
-
-### 4. Boot Up Application
-Start both the backend and frontend servers concurrently (in two separate terminals):
-
-**Terminal 1 (Backend):**
-```bash
-cd server && npm run dev
-```
-
-**Terminal 2 (Frontend):**
-```bash
-cd client && npm run dev
-```
-
-The application will be live at: **http://localhost:5173**
 
 ---
+
+## TL;DR for judges
+
+| | |
+| :--- | :--- |
+| **Problem** | Static QR / roll call is slow and easy to proxy (screenshot + share). |
+| **Fix** | AES-256 QR payload, **10s expiry**, **device binding**, live teacher feed. |
+| **Run** | MongoDB → seed → `server` + `client` → [http://localhost:5173](http://localhost:5173) |
+| **Demo logins** | Teacher `teacher@quickpass.dev` · Student `alex@student.dev` · password `password123` |
+
+**2-minute demo:** start a session as teacher → scan QR as student → attendance appears live → try the same phone as a second student → proxy alert.
+
+---
+
+## Why this exists
+
+Classroom attendance still fails in two ways: it **steals lecture time**, and it is **trivial to fake**. A screenshot of a static QR, or one phone passed around the room, is enough.
+
+QuickPass treats attendance as a **short-lived cryptographic token**, not a picture:
+
+1. Server encrypts `{ sessionId, teacherId, timestamp }` with **AES-256-CBC**.
+2. Socket.io pushes a new payload to the teacher display **every 10 seconds**.
+3. Scan after 10s is rejected as expired (replay / screenshot fails).
+4. Each mark is bound to a **browser device ID**. Same device, different student → both flagged, teacher gets a live `proxy_flagged` event.
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+  T[Teacher dashboard] -->|start session| S[Express + Socket.io]
+  S -->|AES-256 QR every 10s| Q[Live QR on projector]
+  St[Student camera] -->|scan payload + device ID| S
+  S -->|timestamp + enrollment + device checks| DB[(MongoDB)]
+  DB -->|attendance_marked / proxy_flagged| T
+```
+
+**Server checks on every scan**
+
+1. Decrypt payload — invalid cipher text rejected  
+2. Timestamp age ≤ 10 seconds  
+3. Session is `active`  
+4. Student is enrolled in that classroom  
+5. Not already marked present  
+6. `deviceId` not already used by another student this session  
+
+---
+
+## Features
+
+### Teacher
+
 <div align="center">
-  <p><i>Built for <b>Prasunethon 2.0</b> by <b>Lokesh Saini</b></i></p>
+  <img src="./assets/teacher.svg" alt="Teacher dashboard" width="800" />
+</div>
+
+- Start / end live sessions; QR auto-refreshes every 10s
+- Live roster via WebSockets as students scan
+- Instant **proxy alerts** when one device is reused
+- Classroom CRUD, schedule, enroll by email or student ID
+- Per-class analytics (attendance %, proxy counts)
+- One-click **low-attendance emails** (&lt; 75%) when SMTP is configured
+
+### Student
+
+<div align="center">
+  <img src="./assets/student.svg" alt="Student views" width="800" />
+</div>
+
+- In-app camera scanner (no third-party QR app)
+- **5-minute undo** for accidental scans
+- Attendance history + course percentages
+- Markdown notes per classroom
+- Personal schedule view
+
+---
+
+## Judge walkthrough
+
+Use two browsers (or one normal + one incognito) so teacher and student stay logged in.
+
+| Step | Who | What to do |
+| :---: | :--- | :--- |
+| 1 | Teacher | Log in → **Sessions** → start session for **CS101** → leave the QR on screen |
+| 2 | Student | Log in as Alex → **Scan** → point camera at the live QR |
+| 3 | Teacher | Watch the roster update without refresh |
+| 4 | Student | Optional: **Undo** within 5 minutes |
+| 5 | Proxy test | Stay on the same browser, log in as Priya, scan the same QR → **proxy flag** on teacher UI |
+| 6 | Teacher | **Analytics** for historical %, flags, and notify-at-risk (email optional) |
+
+Seeded classroom: **Introduction to Computer Science (CS101)** — 1 teacher, 5 students, 2 past sessions.
+
+---
+
+## Demo accounts
+
+Password for all seeded users: **`password123`**
+
+| Role | Email | Notes |
+| :--- | :--- | :--- |
+| Teacher | `teacher@quickpass.dev` | Dr. Sarah Mitchell |
+| Student | `alex@student.dev` | STU001 — has a sample note |
+| Student | `priya@student.dev` | STU002 |
+| Student | `carlos@student.dev` | STU003 |
+| Student | `emma@student.dev` | STU004 |
+| Student | `david@student.dev` | STU005 |
+
+---
+
+## Run locally
+
+**Need:** Node.js 18+, MongoDB running locally (or Atlas URI).
+
+```bash
+# 1. Install
+npm run install:all
+
+# 2. Env (AES key must be exactly 32 characters)
+cp server/.env.example server/.env
+
+# 3. Seed demo users + CS101
+npm run seed
+
+# 4. Two terminals
+npm run dev:server    # http://localhost:5000
+npm run dev:client    # http://localhost:5173
+```
+
+Open **http://localhost:5173**. Vite proxies `/api` and `/socket.io` to port 5000.
+
+### Environment (server)
+
+| Variable | Required | Purpose |
+| :--- | :---: | :--- |
+| `MONGO_URI` | yes | Mongo connection |
+| `JWT_SECRET` | yes | Auth tokens |
+| `AES_ENCRYPTION_KEY` | yes | Exactly **32 chars** (AES-256) |
+| `PORT` | no | Default `5000` |
+| `CLIENT_URL` | no | CORS / Socket origin, default `http://localhost:5173` |
+| `EMAIL_*` | no | Low-attendance mail; skipped if unset |
+
+---
+
+## Tech stack
+
+| Layer | Stack |
+| :--- | :--- |
+| Client | React 19, Vite, Tailwind CSS, Socket.io-client, html5-qrcode, react-markdown |
+| Server | Node, Express, Socket.io, Mongoose, JWT, bcrypt, Nodemailer |
+| Data | MongoDB — Users, Classrooms, Sessions, AttendanceLogs, Notes |
+| Security | AES-256-CBC QR payloads, JWT on HTTP + sockets, device ID anti-proxy |
+
+```
+quickpass/
+├── client/          React app (port 5173)
+├── server/          API + Socket.io QR engine (port 5000)
+└── assets/          README screenshots
+```
+
+---
+
+<div align="center">
+  <i>Prasunethon 2.0 · built by Lokesh Saini</i>
 </div>
