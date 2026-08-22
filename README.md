@@ -2,6 +2,8 @@
   <img src="./assets/banner.svg" alt="QuickPass Banner" width="800" />
 </div>
 
+<h1 align="center">QuickPass: Dynamic QR Ecosystem</h1>
+
 <div align="center">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
   <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
@@ -13,8 +15,6 @@
   <img src="https://img.shields.io/badge/Prasunethon_2.0-Hackathon_Submission-0056d2?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Built_By-Lokesh_Saini-0d0f12?style=for-the-badge" />
 </div>
-
-<h1 align="center">QuickPass: Dynamic QR Ecosystem</h1>
 
 <br />
 
