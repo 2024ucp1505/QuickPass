@@ -4,7 +4,8 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Auth pages
+// Public pages
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
@@ -23,25 +24,35 @@ import AttendancePage from './pages/student/AttendancePage';
 import NotesPage from './pages/student/NotesPage';
 import SchedulePage from './pages/student/SchedulePage';
 
-// Smart root redirect
-const RootRedirect = () => {
+/**
+ * On auth pages (/login, /register), redirect already-logged-in users
+ * directly to their dashboard so they never see the auth form again.
+ */
+const AuthGuard = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return <Navigate to={user?.role === 'teacher' ? '/teacher' : '/student'} replace />;
+  if (isAuthenticated) {
+    return <Navigate to={user?.role === 'teacher' ? '/dashboard/teacher' : '/dashboard/student'} replace />;
+  }
+  return children;
 };
 
 const AppRoutes = () => (
   <Routes>
-    {/* Root redirect */}
-    <Route path="/" element={<RootRedirect />} />
+    {/* ── Public ───────────────────────────────────────────────────── */}
+    <Route path="/" element={<LandingPage />} />
 
-    {/* Auth */}
-    <Route path="/login" element={<LoginPage />} />
-    <Route path="/register" element={<RegisterPage />} />
+    <Route
+      path="/login"
+      element={<AuthGuard><LoginPage /></AuthGuard>}
+    />
+    <Route
+      path="/register"
+      element={<AuthGuard><RegisterPage /></AuthGuard>}
+    />
 
-    {/* Teacher routes */}
+    {/* ── Teacher dashboard (protected) ────────────────────────────── */}
     <Route element={<ProtectedRoute allowedRoles={['teacher']} />}>
-      <Route path="/teacher" element={<TeacherLayout />}>
+      <Route path="/dashboard/teacher" element={<TeacherLayout />}>
         <Route index element={<TeacherOverview />} />
         <Route path="classrooms" element={<ClassroomsPage />} />
         <Route path="sessions" element={<SessionsPage />} />
@@ -49,9 +60,9 @@ const AppRoutes = () => (
       </Route>
     </Route>
 
-    {/* Student routes */}
+    {/* ── Student dashboard (protected) ────────────────────────────── */}
     <Route element={<ProtectedRoute allowedRoles={['student']} />}>
-      <Route path="/student" element={<StudentLayout />}>
+      <Route path="/dashboard/student" element={<StudentLayout />}>
         <Route index element={<StudentOverview />} />
         <Route path="scan" element={<QRScannerPage />} />
         <Route path="attendance" element={<AttendancePage />} />
@@ -60,47 +71,49 @@ const AppRoutes = () => (
       </Route>
     </Route>
 
-    {/* 404 Fallback */}
+    {/* ── Legacy short routes → redirect to new paths ──────────────── */}
+    <Route path="/teacher/*" element={<Navigate to="/dashboard/teacher" replace />} />
+    <Route path="/student/*" element={<Navigate to="/dashboard/student" replace />} />
+
+    {/* ── 404 ──────────────────────────────────────────────────────── */}
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
 
-const App = () => {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
+const App = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppRoutes />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            fontFamily: '"Source Sans Pro", Arial, sans-serif',
+            fontSize: '14px',
+            borderRadius: '8px',
+            padding: '12px 16px',
+          },
+          success: {
+            iconTheme: { primary: '#16a34a', secondary: '#fff' },
             style: {
-              fontFamily: '"Source Sans Pro", Arial, sans-serif',
-              fontSize: '14px',
-              borderRadius: '8px',
-              padding: '12px 16px',
+              background: '#f0fdf4',
+              color: '#14532d',
+              border: '1px solid #bbf7d0',
             },
-            success: {
-              iconTheme: { primary: '#16a34a', secondary: '#fff' },
-              style: {
-                background: '#f0fdf4',
-                color: '#14532d',
-                border: '1px solid #bbf7d0',
-              },
+          },
+          error: {
+            iconTheme: { primary: '#dc2626', secondary: '#fff' },
+            style: {
+              background: '#fef2f2',
+              color: '#7f1d1d',
+              border: '1px solid #fecaca',
             },
-            error: {
-              iconTheme: { primary: '#dc2626', secondary: '#fff' },
-              style: {
-                background: '#fef2f2',
-                color: '#7f1d1d',
-                border: '1px solid #fecaca',
-              },
-            },
-          }}
-        />
-      </AuthProvider>
-    </BrowserRouter>
-  );
-};
+          },
+        }}
+      />
+    </AuthProvider>
+  </BrowserRouter>
+);
 
 export default App;

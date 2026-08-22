@@ -3,11 +3,11 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
-  { to: '/student', icon: '📊', label: 'Overview', end: true },
-  { to: '/student/scan', icon: '📷', label: 'Scan QR' },
-  { to: '/student/attendance', icon: '📅', label: 'My Attendance' },
-  { to: '/student/notes', icon: '📝', label: 'Notes' },
-  { to: '/student/schedule', icon: '🗓️', label: 'Schedule' },
+  { to: '/dashboard/student', icon: '📊', label: 'Overview', end: true },
+  { to: '/dashboard/student/scan', icon: '📷', label: 'Scan QR' },
+  { to: '/dashboard/student/attendance', icon: '📅', label: 'My Attendance' },
+  { to: '/dashboard/student/notes', icon: '📝', label: 'Notes' },
+  { to: '/dashboard/student/schedule', icon: '🗓️', label: 'Schedule' },
 ];
 
 const StudentLayout = () => {

@@ -51,7 +51,7 @@ const StudentOverview = () => {
               <p className="text-label text-text-muted">Tap to mark your attendance now</p>
             </div>
           </div>
-          <Link to="/student/scan" id="attend-now-btn" className="btn-primary btn-sm">
+          <Link to="/dashboard/student/scan" id="attend-now-btn" className="btn-primary btn-sm">
             Scan QR Now ▶
           </Link>
         </div>
@@ -85,9 +85,9 @@ const StudentOverview = () => {
       <div className="mb-32">
         <h2 className="text-heading text-primary mb-16">Quick Actions</h2>
         <div className="flex flex-wrap gap-12">
-          <Link to="/student/scan" id="quick-scan" className="btn-primary">📷 Scan QR Code</Link>
-          <Link to="/student/attendance" id="quick-attendance" className="btn-secondary">📅 View Attendance</Link>
-          <Link to="/student/notes" id="quick-notes" className="btn-secondary">📝 My Notes</Link>
+          <Link to="/dashboard/student/scan" id="quick-scan" className="btn-primary">📷 Scan QR Code</Link>
+          <Link to="/dashboard/student/attendance" id="quick-attendance" className="btn-secondary">📅 View Attendance</Link>
+          <Link to="/dashboard/student/notes" id="quick-notes" className="btn-secondary">📝 My Notes</Link>
         </div>
       </div>
 

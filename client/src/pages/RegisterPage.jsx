@@ -31,7 +31,7 @@ const RegisterPage = () => {
       if (form.role !== 'student') delete payload.studentId;
       const user = await register(payload);
       toast.success(`Account created! Welcome, ${user.name.split(' ')[0]}!`);
-      navigate(user.role === 'teacher' ? '/teacher' : '/student');
+      navigate(user.role === 'teacher' ? '/dashboard/teacher' : '/dashboard/student');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed.');
     } finally {

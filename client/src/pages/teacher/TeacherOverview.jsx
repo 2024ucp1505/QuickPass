@@ -60,13 +60,13 @@ const TeacherOverview = () => {
       <div className="mb-32">
         <h2 className="text-heading text-primary mb-16">Quick Actions</h2>
         <div className="flex flex-wrap gap-12">
-          <Link to="/teacher/classrooms" id="quick-create-classroom" className="btn-primary">
+          <Link to="/dashboard/teacher/classrooms" id="quick-create-classroom" className="btn-primary">
             ➕ New Classroom
           </Link>
-          <Link to="/teacher/sessions" id="quick-start-session" className="btn-secondary">
+          <Link to="/dashboard/teacher/sessions" id="quick-start-session" className="btn-secondary">
             🎯 Start Session
           </Link>
-          <Link to="/teacher/analytics" id="quick-analytics" className="btn-secondary">
+          <Link to="/dashboard/teacher/analytics" id="quick-analytics" className="btn-secondary">
             📈 View Analytics
           </Link>
         </div>
@@ -101,18 +101,10 @@ const TeacherOverview = () => {
                 <span>📅 {cls.schedule?.length || 0} classes/wk</span>
               </div>
               <div className="mt-16 flex gap-8">
-                <Link
-                  to={`/teacher/sessions?classroom=${cls._id}`}
-                  id={`start-session-${cls._id}`}
-                  className="btn-primary btn-sm flex-1 text-center"
-                >
+                <Link to={`/dashboard/teacher/sessions?classroom=${cls._id}`} className="btn-primary btn-sm flex-1 text-center" id={`start-session-${cls._id}`}>
                   Start Session
                 </Link>
-                <Link
-                  to={`/teacher/analytics?classroom=${cls._id}`}
-                  id={`view-analytics-${cls._id}`}
-                  className="btn-secondary btn-sm flex-1 text-center"
-                >
+                <Link to={`/dashboard/teacher/analytics?classroom=${cls._id}`} className="btn-secondary btn-sm flex-1 text-center" id={`view-analytics-${cls._id}`}>
                   Analytics
                 </Link>
               </div>

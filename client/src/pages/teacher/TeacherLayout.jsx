@@ -3,10 +3,10 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const navItems = [
-  { to: '/teacher', icon: '📊', label: 'Overview', end: true },
-  { to: '/teacher/classrooms', icon: '📚', label: 'Classrooms' },
-  { to: '/teacher/sessions', icon: '🎯', label: 'Sessions' },
-  { to: '/teacher/analytics', icon: '📈', label: 'Analytics' },
+  { to: '/dashboard/teacher', icon: '📊', label: 'Overview', end: true },
+  { to: '/dashboard/teacher/classrooms', icon: '📚', label: 'Classrooms' },
+  { to: '/dashboard/teacher/sessions', icon: '🎯', label: 'Sessions' },
+  { to: '/dashboard/teacher/analytics', icon: '📈', label: 'Analytics' },
 ];
 
 const TeacherLayout = () => {

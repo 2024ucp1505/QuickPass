@@ -23,7 +23,7 @@ const LoginPage = () => {
     try {
       const user = await login(form.email, form.password);
       toast.success(`Welcome back, ${user.name.split(' ')[0]}!`);
-      navigate(user.role === 'teacher' ? '/teacher' : '/student');
+      navigate(user.role === 'teacher' ? '/dashboard/teacher' : '/dashboard/student');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
