@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
+const navItems = [
+  { to: '/teacher', icon: '📊', label: 'Overview', end: true },
+  { to: '/teacher/classrooms', icon: '📚', label: 'Classrooms' },
+  { to: '/teacher/sessions', icon: '🎯', label: 'Sessions' },
+  { to: '/teacher/analytics', icon: '📈', label: 'Analytics' },
+];
+
+const TeacherLayout = () => {
+  const { user, logout } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <aside
+        className={`${
+          sidebarOpen ? 'w-[240px]' : 'w-[64px]'
+        } bg-primary text-on-primary flex flex-col transition-all duration-300 shrink-0`}
+      >
+        {/* Logo */}
+        <div className="p-20 flex items-center gap-12 border-b border-white border-opacity-10">
+          <span className="text-[24px] shrink-0">⚡</span>
+          {sidebarOpen && (
+            <div className="overflow-hidden">
+              <p className="font-bold text-[16px] leading-none">QuickPass</p>
+              <p className="text-[11px] text-white text-opacity-60 mt-2">Teacher Portal</p>
+            </div>
+          )}
+        </div>
+
+        {/* Nav */}
+        <nav className="flex-1 p-12 flex flex-col gap-4">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `flex items-center gap-12 px-12 py-10 rounded-md text-body transition-all duration-150 cursor-pointer ${
+                  isActive
+                    ? 'bg-accent text-white font-semibold'
+                    : 'text-white text-opacity-70 hover:bg-white hover:bg-opacity-10 hover:text-white'
+                }`
+              }
+            >
+              <span className="text-[18px] shrink-0">{item.icon}</span>
+              {sidebarOpen && <span className="whitespace-nowrap">{item.label}</span>}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* User / Logout */}
+        <div className="p-12 border-t border-white border-opacity-10">
+          {sidebarOpen && (
+            <div className="mb-8 px-12 py-8 rounded-md bg-white bg-opacity-5">
+              <p className="text-[13px] font-semibold text-white truncate">{user?.name}</p>
+              <p className="text-[11px] text-white text-opacity-50 truncate">{user?.email}</p>
+            </div>
+          )}
+          <button
+            id="logout-btn"
+            onClick={logout}
+            className="flex items-center gap-12 w-full px-12 py-10 rounded-md text-body text-white text-opacity-70 hover:bg-red-600 hover:text-white transition-all duration-150"
+          >
+            <span className="text-[18px] shrink-0">🚪</span>
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
+
+        {/* Collapse toggle */}
+        <button
+          id="sidebar-toggle"
+          onClick={() => setSidebarOpen((v) => !v)}
+          className="p-12 text-white text-opacity-40 hover:text-white transition-colors duration-150 flex items-center justify-center border-t border-white border-opacity-5"
+        >
+          <span className="text-[14px]">{sidebarOpen ? '◀' : '▶'}</span>
+        </button>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 overflow-y-auto p-32 max-w-full">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+export default TeacherLayout;
