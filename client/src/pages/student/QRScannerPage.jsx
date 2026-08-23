@@ -47,17 +47,10 @@ const QRScannerPage = () => {
       const html5Qr = new Html5Qrcode(SCANNER_ELEMENT_ID);
       scannerRef.current = html5Qr;
 
-      const cameras = await Html5Qrcode.getCameras();
-      if (!cameras || cameras.length === 0) {
-        throw new Error('No cameras found on this device.');
-      }
-
-      // Prefer rear camera
-      const cameraId = cameras.find(c => c.label?.toLowerCase().includes('back'))?.id
-        || cameras[cameras.length - 1]?.id;
-
+      // On mobile browsers, enumerating cameras before permissions are granted often fails.
+      // Using { facingMode: "environment" } reliably triggers the permission prompt and selects the back camera.
       await html5Qr.start(
-        cameraId,
+        { facingMode: "environment" },
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },

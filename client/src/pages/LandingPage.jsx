@@ -141,9 +141,9 @@ const LandingPage = () => {
             </Link>
           </div>
 
-          {/* ── Dashboard preview placeholder ───────────────────────────── */}
+          {/* ── Dashboard preview placeholder (Hidden on mobile) ───────────────────────────── */}
           <div
-            className="w-full max-w-4xl rounded-xl overflow-hidden border border-border shadow-lg animate-fade-in bg-surface"
+            className="w-full max-w-4xl rounded-xl overflow-hidden border border-border shadow-lg animate-fade-in bg-surface hidden md:block"
             style={{ animationDelay: '240ms' }}
           >
             {/* Fake browser chrome */}

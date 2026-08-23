@@ -14,11 +14,11 @@ const TeacherLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background">
       {/* Sidebar */}
       <aside
         className={`${
-          sidebarOpen ? 'w-[240px]' : 'w-[64px]'
+          sidebarOpen ? 'w-full md:w-[240px]' : 'w-full md:w-[64px]'
         } bg-primary text-on-primary flex flex-col transition-all duration-300 shrink-0`}
       >
         {/* Logo */}
@@ -33,7 +33,7 @@ const TeacherLayout = () => {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 p-12 flex flex-col gap-4">
+        <nav className={`flex-1 p-12 flex-col gap-4 ${!sidebarOpen ? 'hidden md:flex' : 'flex'}`}>
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -54,7 +54,7 @@ const TeacherLayout = () => {
         </nav>
 
         {/* User / Logout */}
-        <div className="p-12 border-t border-white border-opacity-10">
+        <div className={`p-12 border-t border-white border-opacity-10 ${!sidebarOpen ? 'hidden md:block' : 'block'}`}>
           {sidebarOpen && (
             <div className="mb-8 px-12 py-8 rounded-md bg-white bg-opacity-5">
               <p className="text-[13px] font-semibold text-white truncate">{user?.name}</p>
@@ -82,7 +82,7 @@ const TeacherLayout = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto p-32 max-w-full">
+      <main className="flex-1 overflow-y-auto p-16 md:p-32 w-full">
         <Outlet />
       </main>
     </div>

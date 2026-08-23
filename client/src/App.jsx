@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import api from './api/axios';
 
 // Public pages
 import LandingPage from './pages/LandingPage';
@@ -36,7 +37,13 @@ const AuthGuard = ({ children }) => {
   return children;
 };
 
-const AppRoutes = () => (
+const AppRoutes = () => {
+  // Ping health endpoint on load to wake up the backend (helpful for free tier hosting like Render)
+  useEffect(() => {
+    api.get('/health').catch(() => {});
+  }, []);
+
+  return (
   <Routes>
     {/* ── Public ───────────────────────────────────────────────────── */}
     <Route path="/" element={<LandingPage />} />
@@ -78,7 +85,8 @@ const AppRoutes = () => (
     {/* ── 404 ──────────────────────────────────────────────────────── */}
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
-);
+  );
+};
 
 const App = () => (
   <BrowserRouter>

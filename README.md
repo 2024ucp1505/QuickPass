@@ -12,6 +12,13 @@
 </p>
 
 <div align="center">
+  <h3>🚀 Live Demo</h3>
+  <p><b>Frontend (Vercel):</b> <a href="https://quick-pass-client-bl4w.vercel.app/">https://quick-pass-client-bl4w.vercel.app/</a></p>
+  <p><b>Backend API (Render):</b> <a href="https://quickpass-backend-cv0o.onrender.com">https://quickpass-backend-cv0o.onrender.com</a></p>
+  <p><b>API Health Endpoint:</b> <a href="https://quickpass-backend-cv0o.onrender.com/health">https://quickpass-backend-cv0o.onrender.com/health</a></p>
+</div>
+
+<div align="center">
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
@@ -29,7 +36,7 @@
 | :--- | :--- |
 | **Problem** | Static QR / roll call is slow and easy to proxy (screenshot + share). |
 | **Fix** | AES-256 QR payload, **10s expiry**, **device binding**, live teacher feed. |
-| **Run** | MongoDB → seed → `server` + `client` → [http://localhost:5173](http://localhost:5173) |
+| **Run** | Live at [https://quick-pass-client-bl4w.vercel.app/](https://quick-pass-client-bl4w.vercel.app/) or locally via `npm run dev:client` |
 | **Demo logins** | Teacher `teacher@quickpass.dev` · Student `alex@student.dev` · password `password123` |
 
 **2-minute demo:** start a session as teacher → scan QR as student → attendance appears live → try the same phone as a second student → proxy alert.
