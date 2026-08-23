@@ -1,29 +1,9 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
- * Create a reusable Nodemailer transporter.
- * Fails gracefully if email config is missing.
- */
-const createTransporter = () => {
-  if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.warn('⚠️  Email config incomplete. Email features will be disabled.');
-    return null;
-  }
-
-  const port = parseInt(process.env.EMAIL_PORT || '587', 10);
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: port,
-    secure: port === 465,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-};
-
-/**
- * Send a low-attendance warning email to a student.
+ * Send a low-attendance warning email to a student using Resend API.
  * @param {Object} params
  * @param {string} params.to - student email
  * @param {string} params.studentName
@@ -31,12 +11,15 @@ const createTransporter = () => {
  * @param {number} params.attendancePercent
  */
 const sendLowAttendanceEmail = async ({ to, studentName, courseName, attendancePercent }) => {
-  const transporter = createTransporter();
-  if (!transporter) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('⚠️  Email config incomplete. Email features will be disabled.');
     return { success: false, error: 'Email service not configured' };
   }
 
-  const from = process.env.EMAIL_FROM || 'QuickPass <noreply@quickpass.dev>';
+  // Resend requires a verified domain to send from, or defaults to onboarding@resend.dev for testing.
+  const from = process.env.RESEND_API_KEY.startsWith('re_') 
+    ? 'QuickPass <onboarding@resend.dev>' 
+    : (process.env.EMAIL_FROM || 'QuickPass <noreply@quickpass.dev>');
 
   const html = `
     <div style="font-family: 'Source Sans Pro', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f4f7fb; padding: 24px; border-radius: 12px;">
@@ -70,13 +53,19 @@ const sendLowAttendanceEmail = async ({ to, studentName, courseName, attendanceP
   `;
 
   try {
-    await transporter.sendMail({
+    const data = await resend.emails.send({
       from,
       to,
       subject: `⚠️ Low Attendance Alert: ${courseName}`,
       html,
     });
-    return { success: true };
+    
+    if (data.error) {
+      console.error('Email send error:', data.error);
+      return { success: false, error: data.error.message };
+    }
+
+    return { success: true, data };
   } catch (err) {
     console.error('Email send error:', err);
     return { success: false, error: err.message };
