@@ -26,13 +26,12 @@ const QRScannerPage = () => {
   const stopScanner = useCallback(async () => {
     if (scannerRef.current) {
       try {
-        const isRunning = scannerRef.current.isScanning;
-        if (isRunning) {
+        if (scannerRef.current.isScanning) {
           await scannerRef.current.stop();
         }
         scannerRef.current.clear();
       } catch (err) {
-        // Ignore errors on cleanup
+        // Ignore cleanup errors — camera may already be stopped
       }
       scannerRef.current = null;
     }
@@ -41,30 +40,56 @@ const QRScannerPage = () => {
 
   const startScanner = useCallback(async () => {
     setCameraError('');
-    setScanning(true);
 
+    // ── Step 1: Explicitly request camera permission first.
+    // On mobile browsers (iOS Safari, Android Chrome), calling Html5Qrcode.getCameras()
+    // or starting the scanner directly without an active media stream often fails
+    // silently or throws a generic NotAllowedError without triggering the permission prompt.
+    // By calling getUserMedia first, we guarantee the permission dialog fires.
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' },
+      });
+      // Immediately release the stream — Html5Qrcode will re-request it.
+      stream.getTracks().forEach((track) => track.stop());
+    } catch (err) {
+      const isDenied =
+        err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
+      const isNotFound =
+        err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
+
+      if (isDenied) {
+        setCameraError(
+          'Camera access was denied. Please enable camera permissions in your browser settings and refresh the page.'
+        );
+      } else if (isNotFound) {
+        setCameraError('No camera found on this device.');
+      } else {
+        setCameraError(err.message || 'Camera access failed. Please try again.');
+      }
+      return; // Stop here — do NOT initialise the scanner
+    }
+
+    // ── Step 2: Permission granted — now start the Html5Qrcode scanner.
+    setScanning(true);
     try {
       const html5Qr = new Html5Qrcode(SCANNER_ELEMENT_ID);
       scannerRef.current = html5Qr;
 
-      // On mobile browsers, enumerating cameras before permissions are granted often fails.
-      // Using { facingMode: "environment" } reliably triggers the permission prompt and selects the back camera.
       await html5Qr.start(
-        { facingMode: "environment" },
+        { facingMode: 'environment' },
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
           aspectRatio: 1.0,
         },
         onQRDetected,
-        () => {} // Ignore scan failures (user still moving camera)
+        () => {} // Ignore per-frame failures (camera still moving)
       );
     } catch (err) {
-      setCameraError(err.message || 'Camera access denied. Please allow camera permissions.');
+      setCameraError(err.message || 'Failed to start the scanner. Please try again.');
       setScanning(false);
-      if (scannerRef.current) {
-        scannerRef.current = null;
-      }
+      scannerRef.current = null;
     }
   }, []);
 
@@ -181,15 +206,18 @@ const QRScannerPage = () => {
 
         {cameraError && (
           <div className="p-16 bg-red-50 border border-danger border-opacity-30 rounded-md">
-            <p className="text-body text-danger font-semibold mb-4">Camera Error</p>
-            <p className="text-label text-danger">{cameraError}</p>
-            <button
-              id="retry-camera-btn"
-              onClick={() => { setCameraError(''); startScanner(); }}
-              className="btn-primary btn-sm mt-12"
-            >
-              Retry
-            </button>
+            <p className="text-body text-danger font-semibold mb-4">📷 Camera Access Required</p>
+            <p className="text-label text-danger mb-12">{cameraError}</p>
+            {/* Only show Retry if it wasn't a hard permission denial */}
+            {!cameraError.includes('browser settings') && (
+              <button
+                id="retry-camera-btn"
+                onClick={() => { setCameraError(''); startScanner(); }}
+                className="btn-primary btn-sm"
+              >
+                Retry
+              </button>
+            )}
           </div>
         )}
 

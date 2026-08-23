@@ -44,6 +44,41 @@ const AnalyticsPage = () => {
     }
   };
 
+  // ── CSV Export ─────────────────────────────────────────────────────────────
+  const handleExportCSV = () => {
+    if (!analytics?.studentStats?.length) return;
+    const selectedClassroom = classrooms.find(c => c._id === selectedId);
+    const classroomName = (selectedClassroom?.name || 'Classroom').replace(/[^a-zA-Z0-9]/g, '_');
+
+    const headers = ['Student Name', 'Student Email', 'Student ID', 'Present Count', 'Total Sessions', 'Attendance %', 'Proxy Flags'];
+    const rows = analytics.studentStats.map(({ student, presentCount, proxyCount, totalSessions, percentage }) => [
+      student.name,
+      student.email,
+      student.studentId || '',
+      presentCount,
+      totalSessions,
+      percentage.toFixed(1),
+      proxyCount,
+    ]);
+
+    const escape = (val) => `"${String(val).replace(/"/g, '""')}"`;
+    const csvContent = [
+      headers.map(escape).join(','),
+      ...rows.map(row => row.map(escape).join(',')),
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Attendance_Report_${classroomName}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('CSV downloaded!');
+  };
+
   if (classroomsLoading) return <LoadingSpinner message="Loading analytics..." />;
 
   const selectedClassroom = classrooms.find(c => c._id === selectedId);
@@ -55,11 +90,11 @@ const AnalyticsPage = () => {
         <p className="page-subtitle">View attendance statistics and identify students at risk.</p>
       </div>
 
-      {/* Classroom selector */}
-      <div className="flex flex-wrap items-center gap-12 mb-32">
+      {/* Classroom selector + actions */}
+      <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-12 mb-32">
         <select
           id="analytics-classroom-select"
-          className="input max-w-xs"
+          className="input w-full sm:max-w-xs"
           value={selectedId}
           onChange={e => setSelectedId(e.target.value)}
         >
@@ -68,16 +103,28 @@ const AnalyticsPage = () => {
             <option key={cls._id} value={cls._id}>[{cls.courseCode}] {cls.name}</option>
           ))}
         </select>
-        {selectedId && (
-          <button
-            id="send-notifications-btn"
-            onClick={handleNotify}
-            disabled={notifying}
-            className="btn-primary"
-          >
-            {notifying ? '⏳ Sending...' : '📧 Notify Low-Attendance Students'}
-          </button>
-        )}
+
+        <div className="flex flex-wrap gap-8">
+          {selectedId && (
+            <button
+              id="send-notifications-btn"
+              onClick={handleNotify}
+              disabled={notifying}
+              className="btn-primary"
+            >
+              {notifying ? '⏳ Sending...' : '📧 Notify Low-Attendance Students'}
+            </button>
+          )}
+          {analytics?.studentStats?.length > 0 && (
+            <button
+              id="export-csv-btn"
+              onClick={handleExportCSV}
+              className="bg-surface text-primary border border-border hover:bg-background px-16 py-8 rounded-md text-body font-semibold transition-colors duration-150"
+            >
+              ⬇ Export CSV
+            </button>
+          )}
+        </div>
       </div>
 
       {loading && <LoadingSpinner message="Loading data..." />}
@@ -108,12 +155,14 @@ const AnalyticsPage = () => {
 
           {/* Student Attendance Table */}
           <div className="card mb-24">
-            <h2 className="text-heading text-primary mb-16">Student Attendance</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-12 mb-16">
+              <h2 className="text-heading text-primary">Student Attendance</h2>
+            </div>
             {analytics.studentStats?.length === 0 ? (
               <p className="text-body text-text-muted">No data available.</p>
             ) : (
-              <div className="table-wrapper">
-                <table>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[520px]">
                   <thead>
                     <tr>
                       <th>Student</th>

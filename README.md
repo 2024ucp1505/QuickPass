@@ -14,7 +14,6 @@
 <div align="center">
   <h3>🚀 Live Demo</h3>
   <p><b>Frontend (Vercel):</b> <a href="https://quick-pass-client-bl4w.vercel.app/">https://quick-pass-client-bl4w.vercel.app/</a></p>
-  <p><b>Backend API (Render):</b> <a href="https://quickpass-backend-cv0o.onrender.com">https://quickpass-backend-cv0o.onrender.com</a></p>
   <p><b>API Health Endpoint:</b> <a href="https://quickpass-backend-cv0o.onrender.com/health">https://quickpass-backend-cv0o.onrender.com/health</a></p>
 </div>
 

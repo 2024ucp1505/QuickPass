@@ -168,7 +168,7 @@ const SessionsPage = () => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-24 mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32">
           {/* QR Display */}
           <div className="card">
             <div className="flex items-center justify-between mb-20">

@@ -132,12 +132,12 @@ const ClassroomsPage = () => {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-header flex items-center justify-between">
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-12">
         <div>
           <h1 className="page-title">Classrooms</h1>
           <p className="page-subtitle">Manage your courses and student enrollment.</p>
         </div>
-        <button id="create-classroom-btn" onClick={openCreate} className="btn-primary">
+        <button id="create-classroom-btn" onClick={openCreate} className="btn-primary self-start sm:self-auto">
           ➕ New Classroom
         </button>
       </div>
@@ -152,7 +152,7 @@ const ClassroomsPage = () => {
         <div className="flex flex-col gap-16">
           {classrooms.map((cls) => (
             <div key={cls._id} className="card">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-12 mb-4">
                     <span className="badge-info">{cls.courseCode}</span>
@@ -171,7 +171,7 @@ const ClassroomsPage = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-8 ml-12 shrink-0">
+                <div className="flex flex-wrap items-center gap-6 ml-0 sm:ml-12 shrink-0 mt-8 sm:mt-0">
                   <button
                     id={`notify-btn-${cls._id}`}
                     onClick={() => handleNotify(cls._id)}
