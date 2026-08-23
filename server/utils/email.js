@@ -16,10 +16,8 @@ const sendLowAttendanceEmail = async ({ to, studentName, courseName, attendanceP
     return { success: false, error: 'Email service not configured' };
   }
 
-  // Resend requires a verified domain to send from, or defaults to onboarding@resend.dev for testing.
-  const from = process.env.RESEND_API_KEY.startsWith('re_') 
-    ? 'QuickPass <onboarding@resend.dev>' 
-    : (process.env.EMAIL_FROM || 'QuickPass <noreply@quickpass.dev>');
+  // Resend requires a verified domain to send from.
+  const from = process.env.EMAIL_FROM;
 
   const html = `
     <div style="font-family: 'Source Sans Pro', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f4f7fb; padding: 24px; border-radius: 12px;">
